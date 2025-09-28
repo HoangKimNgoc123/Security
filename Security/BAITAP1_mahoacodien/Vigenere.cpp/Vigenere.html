@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vigenère Cipher</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(135deg, #a29bfe, #ffeaa7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            text-align: center;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background-color: #6c5ce7;
+            color: white;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background-color: #d63031;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #6c5ce7;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Vigenère Cipher</h2>
+        <textarea id="text" rows="3" placeholder="Nhập văn bản"></textarea>
+        <input type="text" id="key" placeholder="Nhập khóa">
+        <br>
+        <button onclick="encrypt()">Mã hoá</button>
+        <button onclick="decrypt()">Giải mã</button>
+        <h3>Kết quả:</h3>
+        <textarea id="result" rows="3" readonly></textarea>
+    </div>
+
+    <script>
+        function vigenere(text, key, encrypt = true) {
+            let result = "";
+            key = key.toUpperCase();
+            for (let i = 0, j = 0; i < text.length; i++) {
+                let c = text[i];
+                if (c.match(/[a-z]/i)) {
+                    let base = c === c.toUpperCase() ? 65 : 97;
+                    let k = key[j % key.length].charCodeAt(0) - 65;
+                    result += String.fromCharCode((encrypt ? (c.charCodeAt(0) - base + k) : (c.charCodeAt(0) - base - k + 26)) % 26 + base);
+                    j++;
+                } else result += c;
+            }
+            return result;
+        }
+        function encrypt() {
+            document.getElementById('result').value =
+                vigenere(document.getElementById('text').value,
+                    document.getElementById('key').value, true);
+        }
+        function decrypt() {
+            document.getElementById('result').value =
+                vigenere(document.getElementById('text').value,
+                    document.getElementById('key').value, false);
+        }
+    </script>
+</body>
+
+</html>

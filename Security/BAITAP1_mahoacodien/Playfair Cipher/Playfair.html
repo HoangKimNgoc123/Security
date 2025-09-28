@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playfair Cipher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #89f7fe, #66a6ff);
+            /* xanh mát */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            text-align: center;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background-color: #4facfe;
+            /* xanh dương */
+            color: white;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background-color: #0061ff;
+            /* xanh đậm hơn khi hover */
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Playfair Cipher</h2>
+        <textarea id="text" rows="3" placeholder="Nhập văn bản"></textarea>
+        <input type="text" id="key" placeholder="Nhập khóa">
+        <br>
+        <button onclick="encrypt()">Mã hoá</button>
+        <button onclick="decrypt()">Giải mã</button>
+        <h3>Kết quả:</h3>
+        <textarea id="result" rows="3" readonly></textarea>
+    </div>
+
+    <script>
+        let matrix = [];
+
+        // Tạo ma trận 5x5 từ khóa
+        function generateMatrix(key) {
+            key = key.toUpperCase().replace(/[^A-Z]/g, '').replace(/J/g, 'I');
+            let used = '';
+            for (let c of key) {
+                if (!used.includes(c)) used += c;
+            }
+            for (let c = 'A'.charCodeAt(0); c <= 'Z'.charCodeAt(0); c++) {
+                let ch = String.fromCharCode(c);
+                if (ch === 'J') continue;
+                if (!used.includes(ch)) used += ch;
+            }
+            matrix = [];
+            for (let i = 0; i < 5; i++) matrix.push(used.slice(i * 5, i * 5 + 5).split(''));
+        }
+
+        // Tìm vị trí ký tự trong ma trận
+        function findPos(c) {
+            for (let i = 0; i < 5; i++)
+                for (let j = 0; j < 5; j++)
+                    if (matrix[i][j] === c) return [i, j];
+            return [0, 0];
+        }
+
+        // Chuẩn hóa văn bản
+        function prepareText(text) {
+            text = text.toUpperCase().replace(/[^A-Z]/g, '').replace(/J/g, 'I');
+            let res = '';
+            for (let i = 0; i < text.length; i++) {
+                res += text[i];
+                if (i < text.length - 1 && text[i] === text[i + 1]) res += 'X';
+            }
+            if (res.length % 2 !== 0) res += 'X';
+            return res;
+        }
+
+        // Mã hoá / Giải mã Playfair
+        function playfair(text, key, encrypt = true) {
+            generateMatrix(key);
+            text = prepareText(text);
+            let result = '';
+            for (let i = 0; i < text.length; i += 2) {
+                let a = text[i], b = text[i + 1];
+                let [r1, c1] = findPos(a);
+                let [r2, c2] = findPos(b);
+                if (r1 === r2) {
+                    result += matrix[r1][(c1 + (encrypt ? 1 : 4)) % 5];
+                    result += matrix[r2][(c2 + (encrypt ? 1 : 4)) % 5];
+                } else if (c1 === c2) {
+                    result += matrix[(r1 + (encrypt ? 1 : 4)) % 5][c1];
+                    result += matrix[(r2 + (encrypt ? 1 : 4)) % 5][c2];
+                } else {
+                    result += matrix[r1][c2];
+                    result += matrix[r2][c1];
+                }
+            }
+            return result;
+        }
+
+        function encrypt() {
+            let text = document.getElementById('text').value;
+            let key = document.getElementById('key').value;
+            document.getElementById('result').value = playfair(text, key, true);
+        }
+
+        function decrypt() {
+            let text = document.getElementById('text').value;
+            let key = document.getElementById('key').value;
+            document.getElementById('result').value = playfair(text, key, false);
+        }
+    </script>
+</body>
+
+</html>\

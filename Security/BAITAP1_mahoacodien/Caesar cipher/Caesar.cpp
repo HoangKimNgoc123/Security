@@ -18,11 +18,8 @@ string encode(string s, int k){
         }
 
     }
-
-
     return cipher;
 }
-
 int main(){
     int k;
     string s;

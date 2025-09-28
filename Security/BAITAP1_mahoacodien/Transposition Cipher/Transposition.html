@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Transposition Cipher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #74b9ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            width: 420px;
+            text-align: center;
+        }
+
+        textarea,
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 8px;
+            background-color: #0984e3;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0652DD;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #2d3436;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Transposition Cipher</h2>
+        <textarea id="text" rows="3" placeholder="Nhập văn bản..."></textarea>
+        <input type="text" id="key" placeholder="Khóa (ví dụ: 3,1,2)">
+        <br>
+        <button onclick="encrypt()">Mã hóa</button>
+        <button onclick="decrypt()">Giải mã</button>
+        <h3>Kết quả:</h3>
+        <textarea id="result" rows="3" readonly></textarea>
+    </div>
+
+    <script>
+        // Tách khóa thành mảng số
+        function parseKey(str) {
+            return str.split(',').map(Number);
+        }
+
+        // Thuật toán mã hóa hoán vị
+        function transposeEncrypt(text, key) {
+            let n = key.length;
+            let result = "";
+            for (let i = 0; i < text.length; i += n) {
+                for (let k of key) {
+                    if (i + k - 1 < text.length) {
+                        result += text[i + k - 1];
+                    }
+                }
+            }
+            return result;
+        }
+
+        // Thuật toán giải mã hoán vị
+        function transposeDecrypt(text, key) {
+            let n = key.length;
+            let result = text.split('');
+            for (let i = 0; i < text.length; i += n) {
+                let block = text.substr(i, n);
+                for (let j = 0; j < n && i + j < text.length; j++) {
+                    result[i + key[j] - 1] = block[j];
+                }
+            }
+            return result.join('');
+        }
+
+        function encrypt() {
+            let text = document.getElementById('text').value;
+            let key = parseKey(document.getElementById('key').value);
+            document.getElementById('result').value = transposeEncrypt(text, key);
+        }
+
+        function decrypt() {
+            let text = document.getElementById('text').value;
+            let key = parseKey(document.getElementById('key').value);
+            document.getElementById('result').value = transposeDecrypt(text, key);
+        }
+    </script>
+</body>
+
+</html>

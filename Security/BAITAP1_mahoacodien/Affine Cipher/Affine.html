@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Affine Cipher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            width: 400px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+        input, textarea, button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #aaa;
+            font-size: 14px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px dashed #aaa;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Affine Cipher</h2>
+    <label for="text">Văn bản:</label>
+    <input type="text" id="text">
+
+    <label for="a">Khóa a (nguyên tố cùng nhau với 26):</label>
+    <input type="number" id="a">
+
+    <label for="b">Khóa b:</label>
+    <input type="number" id="b">
+
+    <button onclick="encrypt()">Mã hóa</button>
+    <button onclick="decrypt()">Giải mã</button>
+    <div class="result">
+        <p><b>Mã hóa:</b> <span id="cipher"></span></p>
+        <p><b>Giải mã:</b> <span id="plain"></span></p>
+    </div>
+</div>
+
+<script>
+function modInverse(a, m) {
+    a = ((a % m) + m) % m;
+    for (let x = 1; x < m; x++) {
+        if ((a * x) % m === 1) return x;
+    }
+    return 1;
+}
+
+function encrypt() {
+    let text = document.getElementById("text").value.toLowerCase();
+    let a = parseInt(document.getElementById("a").value);
+    let b = parseInt(document.getElementById("b").value);
+    let result = "";
+
+    for (let i = 0; i < text.length; i++) {
+        let c = text.charCodeAt(i);
+        if (c >= 97 && c <= 122) {
+            let x = c - 97;
+            let y = (a * x + b) % 26;
+            result += String.fromCharCode(y + 97);
+        } else {
+            result += text[i];
+        }
+    }
+    document.getElementById("cipher").innerText = result;
+}
+
+function decrypt() {
+    let text = document.getElementById("cipher").innerText;
+    let a = parseInt(document.getElementById("a").value);
+    let b = parseInt(document.getElementById("b").value);
+    let a_inv = modInverse(a, 26);
+    let result = "";
+
+    for (let i = 0; i < text.length; i++) {
+        let c = text.charCodeAt(i);
+        if (c >= 97 && c <= 122) {
+            let y = c - 97;
+            let x = (a_inv * (y - b + 26)) % 26;
+            result += String.fromCharCode(x + 97);
+        } else {
+            result += text[i];
+        }
+    }
+    document.getElementById("plain").innerText = result;
+}
+</script>
+</body>
+</html>

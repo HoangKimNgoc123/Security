@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Caesar Cipher</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #ffffff);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            width: 500px;
+            max-width: 95%;
+            color: #333;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #0288d1;
+            font-size: 24px;
+        }
+
+        label {
+            font-weight: 600;
+            margin-top: 10px;
+            display: block;
+            color: #444;
+        }
+
+        textarea,
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid #bbb;
+            outline: none;
+            background: #f9f9f9;
+            color: #333;
+            font-size: 15px;
+            resize: none;
+            transition: border 0.2s;
+        }
+
+        textarea:focus,
+        input:focus {
+            border: 1px solid #0288d1;
+            background: #fff;
+        }
+
+        textarea[readonly] {
+            background: #f1f8e9;
+            color: #2e7d32;
+            font-style: italic;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.15s ease, opacity 0.2s ease;
+        }
+
+        .btn-enc {
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+        }
+
+        .btn-dec {
+            background: linear-gradient(135deg, #f44336, #ef5350);
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2> Thuật toán Caesar Cipher</h2>
+
+        <label for="text">Nhập văn bản (Plaintext hoặc Ciphertext):</label>
+        <textarea id="text" rows="4" placeholder="Nhập văn bản vào đây..."></textarea>
+
+        <label for="shift">Khóa (k):</label>
+        <input type="number" id="shift" value="3">
+
+        <div class="buttons">
+            <button class="btn-enc" onclick="encrypt()">Mã hóa</button>
+            <button class="btn-dec" onclick="decrypt()">Giải mã</button>
+        </div>
+
+        <label for="result">Kết quả:</label>
+        <textarea id="result" rows="4" readonly placeholder="Kết quả sẽ hiển thị ở đây..."></textarea>
+    </div>
+
+    <script>
+        function caesarEncrypt(text, k) {
+            k = ((k % 26) + 26) % 26;
+            let result = "";
+            for (let i = 0; i < text.length; i++) {
+                let code = text.charCodeAt(i);
+                if (code >= 65 && code <= 90) {
+                    result += String.fromCharCode(((code - 65 + k) % 26) + 65);
+                } else if (code >= 97 && code <= 122) {
+                    result += String.fromCharCode(((code - 97 + k) % 26) + 97);
+                } else {
+                    result += text[i];
+                }
+            }
+            return result;
+        }
+
+        function caesarDecrypt(text, k) {
+            k = ((k % 26) + 26) % 26;
+            let result = "";
+            for (let i = 0; i < text.length; i++) {
+                let code = text.charCodeAt(i);
+                if (code >= 65 && code <= 90) {
+                    result += String.fromCharCode(((code - 65 - k + 26) % 26) + 65);
+                } else if (code >= 97 && code <= 122) {
+                    result += String.fromCharCode(((code - 97 - k + 26) % 26) + 97);
+                } else {
+                    result += text[i];
+                }
+            }
+            return result;
+        }
+
+        function encrypt() {
+            let text = document.getElementById("text").value;
+            let shift = parseInt(document.getElementById("shift").value);
+            document.getElementById("result").value = caesarEncrypt(text, shift);
+        }
+
+        function decrypt() {
+            let text = document.getElementById("text").value;
+            let shift = parseInt(document.getElementById("shift").value);
+            document.getElementById("result").value = caesarDecrypt(text, shift);
+        }
+    </script>
+</body>
+
+</html>
