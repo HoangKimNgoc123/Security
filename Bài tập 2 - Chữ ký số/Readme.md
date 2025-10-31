@@ -1,7 +1,7 @@
 ### Hoàng Kim Ngọc - MSSV: K225480106053 
-##BÀI TẬP 2- CHỮ KÝ SỐ VỚI PDF
+## BÀI TẬP 2- CHỮ KÝ SỐ VỚI PDF
 
-###CÁC BƯỚC TẠO CHỮ KÝ SỐ
+### CÁC BƯỚC TẠO CHỮ KÝ SỐ
 1. Chuẩn bị file PDF gốc: original.pdf
 2. Tạo Signature field (AcroForm), reserve vùng /Contents (8192 bytes).
    - Cài Python + pip:
@@ -43,4 +43,5 @@
      <img width="478" height="631" alt="image" src="https://github.com/user-attachments/assets/45431213-eba6-4980-b681-7e9147ca26c0" />
 
      <img width="472" height="629" alt="image" src="https://github.com/user-attachments/assets/a5a705b4-cb09-4e5c-8240-969a63ffebe5" />
+
 
