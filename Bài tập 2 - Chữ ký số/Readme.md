@@ -1,3 +1,4 @@
+### Hoàng Kim Ngọc - MSSV: K225480106053 
 ##BÀI TẬP 2- CHỮ KÝ SỐ VỚI PDF
 
 ###CÁC BƯỚC TẠO CHỮ KÝ SỐ
@@ -42,3 +43,4 @@
      <img width="478" height="631" alt="image" src="https://github.com/user-attachments/assets/45431213-eba6-4980-b681-7e9147ca26c0" />
 
      <img width="472" height="629" alt="image" src="https://github.com/user-attachments/assets/a5a705b4-cb09-4e5c-8240-969a63ffebe5" />
+
